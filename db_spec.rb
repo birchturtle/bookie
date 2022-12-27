@@ -3,7 +3,9 @@ require './book'
 require './db'
 
 describe 'author database' do
-  before(:example) do
+  before(:context) do
+    File.delete('./test.sqlite3') if FileTest.exists? './test.sqlite3'
+    expect(FileTest.exists?('./test.sqlite3')).to eq(false)
     @authorDb = AuthorDb.new('test.sqlite3')
   end
 
@@ -16,5 +18,9 @@ describe 'author database' do
     @authorDb.addAuthor(author)
 
     expect(1).to eq(1)
+  end
+
+  after(:context) do
+    File.delete('./test.sqlite3')
   end
 end
