@@ -55,4 +55,10 @@ class AuthorDb < Db
   def addAuthor(a)
     @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', a.name
   end
+
+  def getAuthorByName(name)
+    cols = @db.execute 'SELECT * FROM Authors WHERE Name = ?', name
+    id, name = cols[0]
+    Author.new(id, name) unless id.nil?
+  end
 end

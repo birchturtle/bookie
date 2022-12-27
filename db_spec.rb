@@ -14,10 +14,15 @@ describe 'author database' do
   end
 
   it 'can add an author' do
-    author = Author.new 'Test Testesen'
-    @authorDb.addAuthor(author)
+    author = Author.new(1, 'Test Testesen')
+    author_retrieved = @authorDb.getAuthorByName(author.name)
 
-    expect(1).to eq(1)
+    expect(author_retrieved.nil?).to eq(true)
+
+    @authorDb.addAuthor(author)
+    author_retrieved = @authorDb.getAuthorByName(author.name)
+
+    expect([author_retrieved.id, author_retrieved.name]).to eq([author.id, author.name])
   end
 
   after(:context) do

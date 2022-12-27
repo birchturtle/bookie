@@ -1,5 +1,6 @@
 class Book
   attr_reader :title, :read, :author, :genre, :priority
+
   def initialize(title, read, author, genre, priority)
     @title = title
     @read = read
@@ -7,29 +8,33 @@ class Book
     @genre = genre
     @priority = priority
   end
+
   def summarize
     puts "Title: #{@title} (by #{@author.name})"
-    puts "#{"not " unless read?}read, considered to be #{@genre.name}"
+    puts "#{'not ' unless read?}read, considered to be #{@genre.name}"
     puts "priority: #{@priority}"
-    puts ""
+    puts ''
   end
+
   def read?
     @read
   end
 end
 
 class Author
-  attr_reader :name
-  def initialize(name)
+  attr_reader :name, :id
+
+  def initialize(id, name)
+    @id = id
     @name = name
   end
 end
 
 class Genre
   attr_reader :name, :type
+
   def initialize(name, type)
     @name = name
     @type = type
   end
 end
-
