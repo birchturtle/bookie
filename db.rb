@@ -1,27 +1,42 @@
-require "sqlite3"
-require "rspec"
-require("./book.rb")
+require 'sqlite3'
+require 'rspec'
+require('./book')
 
 private class Db
-    def initialize(filename)
-    @db = SQLite3::Database.new filename
-  end
-end
+          def initialize(filename)
+            @db = SQLite3::Database.new filename
+          end
+        end
 
 class BookDb < Db
   def getAllBooks
   end
+
   def getBooksPerAuthor
   end
+
   def getBooksPerGenre
   end
+
   def getByPriority(num)
   end
+
   def addBook(b)
   end
 end
 
 class GenreDb < Db
+  def initialize(filename)
+    super(filename)
+    rows = @db.execute <<-SQL
+         CREATE TABLE IF NOT EXISTS Genres (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Name varchar(255),
+                Type varchar(255)
+                );
+    SQL
+  end
+
   def addGenre(g)
   end
 end
@@ -34,25 +49,10 @@ class AuthorDb < Db
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Name varchar(255)
                 );
-SQL
+    SQL
   end
+
   def addAuthor(a)
-    @db.execute "INSERT INTO Authors VALUES ( ? )", a.name
-  end
-end
-
-describe "author database" do
-  it "creates table on init" do
-    authorDb = AuthorDb.new("test.sqlite3")
-
-    expect(authorDb.class).to eq(AuthorDb)
-  end
-
-  it "can add an author" do
-    authorDb = AuthorDb.new "test.sqlite3"
-    author = Author.new "Test Testesen"
-    authorDb.addAuthor(author)
-
-    
+    @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', a.name
   end
 end

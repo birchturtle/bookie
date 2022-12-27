@@ -1,3 +1,5 @@
 *.lock
 *.sqlite3
 *.rb~
+vendor
+.bundle

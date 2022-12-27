@@ -7,3 +7,5 @@ source "https://rubygems.org"
 gem "rspec", "~> 3.12"
 
 gem "sqlite3", "~> 1.5"
+
+gem "rubocop", "~> 1.41"
