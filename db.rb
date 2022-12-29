@@ -38,6 +38,7 @@ class GenreDb < Db
   end
 
   def addGenre(g)
+    @db.execute 'INSERT INTO Genres (Name, Type) VALUES ( ?, ? )', g.name, g.type unless g.name.nil? and g.type.nil?
   end
 end
 
@@ -53,7 +54,7 @@ class AuthorDb < Db
   end
 
   def addAuthor(a)
-    @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', a.name
+    @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', a.name unless a.name.nil?
   end
 
   def getAuthorByName(name)
