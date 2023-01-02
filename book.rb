@@ -31,9 +31,10 @@ class Author
 end
 
 class Genre
-  attr_reader :name, :type
+  attr_reader :name, :type, :id
 
-  def initialize(name, type)
+  def initialize(id, name, type)
+    @id = id
     @name = name
     @type = type
   end

@@ -29,3 +29,27 @@ describe 'author database' do
     File.delete('./test.sqlite3')
   end
 end
+
+describe 'genre database' do
+  before(:context) do
+    File.delete('./test.sqlite3') if FileTest.exists? './test.sqlite3'
+    expect(FileTest.exists?('./test.sqlite3')).to eq(false)
+    @genreDb = GenreDb.new('test.sqlite3')
+  end
+
+  it 'can add a genre' do
+    genre = Genre.new(1, 'horror', 'fiction')
+    genreRetrieved = @genreDb.get_genre_by_name(genre.name)
+
+    expect(genreRetrieved.nil?).to eq(true)
+
+    @genreDb.add_genre genre
+    genreRetrieved = @genreDb.get_genre_by_name(genre.name)
+
+    expect([genreRetrieved.id, genreRetrieved.name, genreRetrieved.type]).to eq([genre.id, genre.name, genre.type])
+  end
+
+  after(:context) do
+    File.delete('./test.sqlite3')
+  end
+end

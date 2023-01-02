@@ -40,6 +40,12 @@ class GenreDb < Db
   def add_genre(g)
     @db.execute 'INSERT INTO Genres (Name, Type) VALUES ( ?, ? )', g.name, g.type unless g.name.nil? and g.type.nil?
   end
+
+  def get_genre_by_name(g)
+    cols = @db.execute 'SELECT * FROM Genres WHERE Name = ?', g
+    id, name, type = cols[0]
+    Genre.new(id, name, type) unless id.nil?
+  end
 end
 
 class AuthorDb < Db
