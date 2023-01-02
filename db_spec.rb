@@ -15,12 +15,12 @@ describe 'author database' do
 
   it 'can add an author' do
     author = Author.new(1, 'Test Testesen')
-    author_retrieved = @authorDb.getAuthorByName(author.name)
+    author_retrieved = @authorDb.get_author_by_name(author.name)
 
     expect(author_retrieved.nil?).to eq(true)
 
-    @authorDb.addAuthor(author)
-    author_retrieved = @authorDb.getAuthorByName(author.name)
+    @authorDb.add_author(author)
+    author_retrieved = @authorDb.get_author_by_name(author.name)
 
     expect([author_retrieved.id, author_retrieved.name]).to eq([author.id, author.name])
   end

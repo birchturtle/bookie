@@ -9,16 +9,16 @@ private class Db
         end
 
 class BookDb < Db
-  def getAllBooks
+  def get_all_books
   end
 
-  def getBooksPerAuthor
+  def get_books_per_author
   end
 
-  def getBooksPerGenre
+  def get_books_per_genre
   end
 
-  def getByPriority(num)
+  def get_by_priority(num)
   end
 
   def addBook(b)
@@ -37,7 +37,7 @@ class GenreDb < Db
     SQL
   end
 
-  def addGenre(g)
+  def add_genre(g)
     @db.execute 'INSERT INTO Genres (Name, Type) VALUES ( ?, ? )', g.name, g.type unless g.name.nil? and g.type.nil?
   end
 end
@@ -53,11 +53,11 @@ class AuthorDb < Db
     SQL
   end
 
-  def addAuthor(a)
+  def add_author(a)
     @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', a.name unless a.name.nil?
   end
 
-  def getAuthorByName(name)
+  def get_author_by_name(name)
     cols = @db.execute 'SELECT * FROM Authors WHERE Name = ?', name
     id, name = cols[0]
     Author.new(id, name) unless id.nil?
