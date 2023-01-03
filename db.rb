@@ -11,7 +11,7 @@ private class Db
 class BookDb < Db
   def initialize(filename)
     super(filename)
-     @db.execute <<-SQL
+    @db.execute <<-SQL
          CREATE TABLE IF NOT EXISTS Books (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Title varchar(255),
