@@ -9,6 +9,20 @@ private class Db
         end
 
 class BookDb < Db
+  def initialize(filename)
+    super(filename)
+     @db.execute <<-SQL
+         CREATE TABLE IF NOT EXISTS Books (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Title varchar(255),
+                Read int,
+                AuthorId int,
+                GenreId int,
+                Priority int
+                );
+    SQL
+  end
+
   def get_all_books
   end
 
@@ -21,8 +35,28 @@ class BookDb < Db
   def get_by_priority(num)
   end
 
-  def addBook(b)
+  def add_book(b)
+    @db.execute 'INSERT INTO Books(Title, Read, AuthorId, GenreId, Priority) VALUES ( ?, ?, ?, ?, ? )', b.title, fix_bool_for_sqlite(b.read?), b.author, b.genre, b.priority
   end
+
+  def fix_bool_for_sqlite(bool)
+    if bool.is_a?(Integer)
+      bool == 1
+    else
+      if bool
+        1
+      else
+        0
+      end
+    end
+  end
+
+  def get_by_name(name)
+    cols = @db.execute 'SELECT * FROM Books WHERE Title = ?', name
+    id, title, read, authorId, genreId, priority = cols[0]
+    Book.new(id, title, fix_bool_for_sqlite(read), authorId, genreId, priority) unless id.nil?
+  end
+  private :fix_bool_for_sqlite
 end
 
 class GenreDb < Db
