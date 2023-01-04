@@ -15,19 +15,11 @@ class Interactor
 
     puts "Author? Note: Must match existing name in author database"
     author_name = gets.tr("\n", "")
-    author = @authorDb.get_author_by_name(author_name)
-    if author.nil?
-      puts "Error: #{author_name} does not exist. Please add it first."
-      exit 0
-    end
+    author = get_dependency_entity_by_name(:author, author_name)
 
     puts "Genre? Note: Must match existing name in genre database"
     genre_name = gets.tr("\n", "")
-    genre = @genreDb.get_genre_by_name(genre_name)
-    if genre.nil?
-      puts "Error: #{genre_name} does not exist. Please add it first."
-      exit 0
-    end
+    genre = get_dependency_entity_by_name(:genre, genre_name)
 
     puts "Read? ('y' or 'n')"
     read = gets.tr("\n", "") == 'y' ? true : false
@@ -40,6 +32,7 @@ class Interactor
       puts "Failed to add #{title}"
       exit 1
     end
+
     puts "Book added successfully!"
     summarize_book(book, author, genre)
   end
@@ -96,5 +89,19 @@ class Interactor
     puts "#{'not ' unless book.read?}read, considered to be #{genre.name} (#{genre.type})"
     puts "priority: #{book.priority}"
     puts ''
+  end
+  def get_dependency_entity_by_name(type, name)
+    db = case type
+         when :author
+           @authorDb
+         when :genre
+           @genreDb
+         end
+    entity = db.send("get_" + type.to_s + "_by_name", name)
+    if entity.nil?
+      puts "Error: #{name} does not exist. Please add it first."
+      exit 0
+    end
+    entity
   end
 end
