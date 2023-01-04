@@ -1,6 +1,6 @@
 require './interactor.rb'
 class Main
-  INTERACTOR = Interactor.new
+  INTERACTOR = Interactor.new "bookie.sqlite3"
   def run
     if ARGV[0] == '-h' then
       print_help
@@ -14,7 +14,7 @@ class Main
     puts "Useful help text here :-)"
   end
   def init_menu
-    puts "Do?"
+    puts "Would you like to..?"
     puts <<-MENU
       1) List
       2) Delete
@@ -34,7 +34,7 @@ class Main
              end
   end
   def entity_menu(action)
-    puts "Do?"
+    puts "With..?"
     puts <<-MENU
       1) Book
       2) Author
