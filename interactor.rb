@@ -10,7 +10,38 @@ class Interactor
     @genreDb = GenreDb.new(databaseFile)
   end
   def add_book
-    puts "Adding book!"
+    puts "Title?"
+    title = gets.tr("\n", "")
+
+    puts "Author? Note: Must match existing name in author database"
+    author_name = gets.tr("\n", "")
+    author = @authorDb.get_author_by_name(author_name)
+    if author.nil?
+      puts "Error: #{author_name} does not exist. Please add it first."
+      exit 0
+    end
+
+    puts "Genre? Note: Must match existing name in genre database"
+    genre_name = gets.tr("\n", "")
+    genre = @genreDb.get_genre_by_name(genre_name)
+    if genre.nil?
+      puts "Error: #{genre_name} does not exist. Please add it first."
+      exit 0
+    end
+
+    puts "Read? ('y' or 'n')"
+    read = gets.tr("\n", "") == 'y' ? true : false
+    puts "Priority? (0 highest, ...n lowest)"
+    priority = gets.tr("\n", "").to_i
+
+    @bookDb.add_book(Book.new(nil, title, read, author.id, genre.id, priority))
+    book = @bookDb.get_by_name(title)
+    if book.nil?
+      puts "Failed to add #{title}"
+      exit 1
+    end
+    puts "Book added successfully!"
+    summarize_book(book, author, genre)
   end
   def delete_book
     puts "Deleting book!"
@@ -58,5 +89,12 @@ class Interactor
   end
   def list_genre
     puts "Listing genre(s)!"
+  end
+  private
+  def summarize_book(book, author, genre)
+    puts "Title: #{book.title} (by #{author.name})"
+    puts "#{'not ' unless book.read?}read, considered to be #{genre.name} (#{genre.type})"
+    puts "priority: #{book.priority}"
+    puts ''
   end
 end

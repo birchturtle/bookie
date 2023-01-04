@@ -10,13 +10,6 @@ class Book
     @priority = priority
   end
 
-  def summarize
-    puts "Title: #{@title} (by #{@author.name})"
-    puts "#{'not ' unless read?}read, considered to be #{@genre.name}"
-    puts "priority: #{@priority}"
-    puts ''
-  end
-
   def read?
     @read
   end
