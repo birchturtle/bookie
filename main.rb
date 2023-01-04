@@ -16,17 +16,17 @@ class Main
   def init_menu
     puts "Would you like to..?"
     puts <<-MENU
-      1) List
-      2) Delete
-      3) Add
+      L)ist
+      D)elete
+      A)dd
     MENU
     action = gets
     case action.tr("\n", "")
-             when "1"
+             when "l"
                entity_menu "list"
-             when "2"
+             when "d"
                entity_menu "delete"
-             when "3"
+             when "a"
                entity_menu "add"
              else
                print_help
@@ -34,19 +34,19 @@ class Main
              end
   end
   def entity_menu(action)
-    puts "With..?"
+    puts "What..?"
     puts <<-MENU
-      1) Book
-      2) Author
-      3) Genre
+      B)ook
+      A)uthor
+      G)enre
     MENU
     entity = gets
     case entity.tr("\n", "")
-             when "1"
+             when "b"
                INTERACTOR.send((action + "_" + "book").to_sym)
-             when "2"
+             when "a"
                INTERACTOR.send((action + "_" + "author").to_sym)
-             when "3"
+             when "g"
                INTERACTOR.send((action + "_" + "genre").to_sym)
              else
                print_help
