@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book
   attr_reader :id, :title, :read, :author, :genre, :priority
 

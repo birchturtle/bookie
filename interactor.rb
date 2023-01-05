@@ -1,107 +1,123 @@
-require("./book.rb")
-require("./db.rb")
-
 # frozen_string_literal: true
 
+require('./book')
+require('./database')
+
 class Interactor
-  def initialize(databaseFile)
-    @authorDb = AuthorDb.new(databaseFile)
-    @bookDb = BookDb.new(databaseFile)
-    @genreDb = GenreDb.new(databaseFile)
+  def initialize(database_file)
+    @author_db = AuthorDb.new(database_file)
+    @book_db = BookDb.new(database_file)
+    @genre_db = GenreDb.new(database_file)
   end
+
   def add_book
-    puts "Title?"
-    title = gets.tr("\n", "")
-
-    puts "Author? Note: Must match existing name in author database"
-    author_name = gets.tr("\n", "")
+    puts 'Title?'
+    title = gets.tr('\n', '')
+    puts 'Author? Note: Must match existing name in author database'
+    author_name = gets.tr('\n', '')
     author = get_dependency_entity_by_name(:author, author_name)
-
-    puts "Genre? Note: Must match existing name in genre database"
-    genre_name = gets.tr("\n", "")
+    puts 'Genre? Note: Must match existing name in genre database'
+    genre_name = gets.tr('\n', '')
     genre = get_dependency_entity_by_name(:genre, genre_name)
-
     puts "Read? ('y' or 'n')"
-    read = gets.tr("\n", "") == 'y' ? true : false
-    puts "Priority? (0 highest, ...n lowest)"
-    priority = gets.tr("\n", "").to_i
-
-    @bookDb.add_book(Book.new(nil, title, read, author.id, genre.id, priority))
-    book = @bookDb.get_by_name(title)
+    read = gets.tr('\n', '') == 'y'
+    puts 'Priority? (0 highest, ...n lowest)'
+    priority = gets.tr('\n', '').to_i
+    @book_db.add_book(Book.new(nil, title, read, author.id, genre.id, priority))
+    book = @book_db.get_by_name(title)
     if book.nil?
       puts "Failed to add #{title}"
       exit 1
     end
-
-    puts "Book added successfully!"
+    puts 'Book added successfully!'
     summarize_book(book, author, genre)
   end
+
   def delete_book
-    puts "Deleting book!"
+    puts 'Deleting book!'
   end
+
   def list_book
-    puts "Listing book(s)!"
+    puts 'Listing book(s)!'
   end
+
   def add_author
-    puts "Name?"
-    name = gets.tr("\n", "")
-    @authorDb.add_author(Author.new(nil, name))
-    author = @authorDb.get_author_by_name(name)
+    puts 'Name?'
+    name = gets.tr('\n', '')
+    @author_db.add_author(Author.new(nil, name))
+    author = @author_db.get_author_by_name(name)
     if author.nil?
-      puts "Failed to add author"
+      puts 'Failed to add author'
     else
       puts "Added #{author.name} to the database succesfully."
     end
   end
+
   def delete_author
-    puts "Deleting author!"
+    puts 'Deleting author!'
   end
+
   def list_author
-    puts "Listing author(s)!"
+    puts 'Listing author(s)!'
   end
+
   def add_genre
-    puts "Name?"
-    name = gets.tr("\n", "")
+    puts 'Name?'
+    name = gets.tr('\n', '')
     puts "Type? ('f' for fiction, 'nf' for non-fiction)"
-    type = case gets.tr("\n", "")
+    type = case gets.tr('\n', '')
            when 'f'
-             "Fiction"
+             'Fiction'
            when 'nf'
-             "Non-Fiction"
+             'Non-Fiction'
+           else
+             puts 'Sorry, unrecognized...'
+             exit 1
            end
-    @genreDb.add_genre(Genre.new(nil, name, type))
-    genre = @genreDb.get_genre_by_name(name)
+    @genre_db.add_genre(Genre.new(nil, name, type))
+    genre = @genre_db.get_genre_by_name(name)
     if genre.nil?
       puts "Failed to add #{name} to genre database."
     else
       puts "Added #{genre.name} (#{genre.type}) to database successfully."
     end
   end
+
   def delete_genre
-    puts "Deleting genre!"
+    puts 'Deleting genre!'
   end
+
   def list_genre
-    puts "Listing genre(s)!"
+    puts 'Listing genre(s)!'
   end
+
   private
+
   def summarize_book(book, author, genre)
     puts "Title: #{book.title} (by #{author.name})"
     puts "#{'not ' unless book.read?}read, considered to be #{genre.name} (#{genre.type})"
     puts "priority: #{book.priority}"
     puts ''
   end
+
   def get_dependency_entity_by_name(type, name)
-    db = case type
-         when :author
-           @authorDb
-         when :genre
-           @genreDb
-         end
-    entity = db.send("get_" + type.to_s + "_by_name", name)
+    db = get_entity_database_by_type(type)
+    entity = db.send("get_#{type.to_s}_by_name")
     if entity.nil?
       puts "Error: #{name} does not exist. Please add it first."
       exit 0
     end
     entity
+  end
+
+  def get_entity_database_by_type(type)
+    case type
+    when :author
+      @author_db
+    when :genre
+      @genre_db
+    else
+      exit 1
+    end
   end
 end
