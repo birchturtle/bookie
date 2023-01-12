@@ -25,8 +25,8 @@ class Main
       D)elete
       A)dd
     MENU
-    action = gets
-    case action.tr('\n', '')
+    action = gets.strip
+    case action
     when 'l'
       entity_menu 'list'
     when 'd'
@@ -46,8 +46,8 @@ class Main
       A)uthor
       G)enre
     MENU
-    entity = gets
-    case entity.tr("\n", '')
+    entity = gets.strip
+    case entity
     when 'b'
       INTERACTOR.send("#{action}_book".to_sym)
     when 'a'

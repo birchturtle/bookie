@@ -12,17 +12,17 @@ class Interactor
 
   def add_book
     puts 'Title?'
-    title = gets.tr('\n', '')
+    title = gets.strip
     puts 'Author? Note: Must match existing name in author database'
-    author_name = gets.tr('\n', '')
+    author_name = gets.strip
     author = get_dependency_entity_by_name(:author, author_name)
     puts 'Genre? Note: Must match existing name in genre database'
-    genre_name = gets.tr('\n', '')
+    genre_name = gets.strip
     genre = get_dependency_entity_by_name(:genre, genre_name)
     puts "Read? ('y' or 'n')"
-    read = gets.tr('\n', '') == 'y'
+    read = gets.strip == 'y'
     puts 'Priority? (0 highest, ...n lowest)'
-    priority = gets.tr('\n', '').to_i
+    priority = gets.strip.to_i
     @book_db.add_book(Book.new(nil, title, read, author.id, genre.id, priority))
     book = @book_db.get_by_name(title)
     if book.nil?
@@ -43,7 +43,7 @@ class Interactor
 
   def add_author
     puts 'Name?'
-    name = gets.tr('\n', '')
+    name = gets.strip
     @author_db.add_author(Author.new(nil, name))
     author = @author_db.get_author_by_name(name)
     if author.nil?
@@ -63,9 +63,9 @@ class Interactor
 
   def add_genre
     puts 'Name?'
-    name = gets.tr('\n', '')
+    name = gets.strip
     puts "Type? ('f' for fiction, 'nf' for non-fiction)"
-    type = case gets.tr('\n', '')
+    type = case gets.strip
            when 'f'
              'Fiction'
            when 'nf'
