@@ -25,7 +25,16 @@ class BookDb < Database
     SQL
   end
 
-  def get_all_books; end
+  def get_all_books
+    books = []
+    rows = @db.execute 'SELECT * FROM BOOKS'
+    rows.each do |row|
+      id, title, read, author_id, genre_id, priority = row
+      book = Book.new(id, title, fix_bool_for_sqlite(read), author_id, genre_id, priority) unless id.nil?
+      books << book
+    end
+    books
+  end
 
   def get_books_per_author; end
 
@@ -79,6 +88,12 @@ class GenreDb < Database
     id, name, type = cols[0]
     Genre.new(id, name, type) unless id.nil?
   end
+
+  def get_genre_by_id(genre_id)
+    cols = @db.execute 'SELECT * FROM Genres WHERE ID = ?', genre_id
+    id, name, type = cols[0]
+    Genre.new(id, name, type) unless id.nil?
+  end
 end
 
 class AuthorDb < Database
@@ -100,5 +115,11 @@ class AuthorDb < Database
     cols = @db.execute 'SELECT * FROM Authors WHERE Name = ?', name
     id, name = cols[0]
     Author.new(id, name) unless id.nil?
+  end
+
+  def get_author_by_id(id)
+    cols = @db.execute 'SELECT * FROM Authors WHERE Id = ?', id
+    author_id, name = cols[0]
+    Author.new(author_id, name) unless author_id.nil?
   end
 end

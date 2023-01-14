@@ -95,6 +95,13 @@ describe 'book database' do
              ])
   end
 
+  it 'can get all books' do
+    books = @book_db.get_all_books
+
+    expect(books.length).to be > 0
+    expect(books[0].nil?).to be false
+  end
+
   after(:context) do
     File.delete('test.sqlite3')
   end

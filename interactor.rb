@@ -42,11 +42,15 @@ class Interactor
     else
       puts 'Found book.'
     end
-
   end
 
   def list_book
-    puts 'Listing book(s)!'
+    books = @book_db.get_all_books
+    books.each do |book|
+      author = @author_db.get_author_by_id book.author
+      genre = @genre_db.get_genre_by_id book.genre
+      summarize_book book, author, genre unless author.nil? || genre.nil?
+    end
   end
 
   def add_author
