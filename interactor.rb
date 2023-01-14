@@ -34,7 +34,15 @@ class Interactor
   end
 
   def delete_book
-    puts 'Deleting book!'
+    puts 'Title?'
+    title = gets.strip
+    book = @book_db.get_by_name title
+    if book.nil?
+      puts 'Book not found'
+    else
+      puts 'Found book.'
+    end
+
   end
 
   def list_book
@@ -42,45 +50,23 @@ class Interactor
   end
 
   def add_author
-    puts 'Name?'
-    name = gets.strip
-    @author_db.add_author(Author.new(nil, name))
-    author = @author_db.get_author_by_name(name)
-    if author.nil?
-      puts 'Failed to add author'
-    else
-      puts "Added #{author.name} to the database succesfully."
-    end
-  end
-
-  def delete_author
-    puts 'Deleting author!'
+    handler = Author_Handler.new
+    handler.add_author @author_db
   end
 
   def list_author
-    puts 'Listing author(s)!'
+    handler = Author_Handler.new
+    handler.list_author @author_db
+  end
+
+  def delete_author
+    handler = Author_Handler.new
+    handler.delete_author @author_db
   end
 
   def add_genre
-    puts 'Name?'
-    name = gets.strip
-    puts "Type? ('f' for fiction, 'nf' for non-fiction)"
-    type = case gets.strip
-           when 'f'
-             'Fiction'
-           when 'nf'
-             'Non-Fiction'
-           else
-             puts 'Sorry, unrecognized...'
-             exit 1
-           end
-    @genre_db.add_genre(Genre.new(nil, name, type))
-    genre = @genre_db.get_genre_by_name(name)
-    if genre.nil?
-      puts "Failed to add #{name} to genre database."
-    else
-      puts "Added #{genre.name} (#{genre.type}) to database successfully."
-    end
+    handler = Genre_Handler.new
+    handler.add_genre @genre_db
   end
 
   def delete_genre
@@ -119,5 +105,51 @@ class Interactor
     else
       exit 1
     end
+  end
+end
+
+class Genre_Handler
+  def add_genre(genre_db)
+    puts 'Name?'
+    name = gets.strip
+    puts "Type? ('f' for fiction, 'nf' for non-fiction)"
+    type = case gets.strip
+           when 'f'
+             'Fiction'
+           when 'nf'
+             'Non-Fiction'
+           else
+             puts 'Sorry, unrecognized...'
+             exit 1
+           end
+    genre_db.add_genre(Genre.new(nil, name, type))
+    genre = genre_db.get_genre_by_name(name)
+    if genre.nil?
+      puts "Failed to add #{name} to genre database."
+    else
+      puts "Added #{genre.name} (#{genre.type}) to database successfully."
+    end
+  end
+end
+
+class Author_Handler
+  def add_author(author_db)
+    puts 'Name?'
+    name = gets.strip
+    author_db.add_author(Author.new(nil, name))
+    author = author_db.get_author_by_name(name)
+    if author.nil?
+      puts 'Failed to add author'
+    else
+      puts "Added #{author.name} to the database succesfully."
+    end
+  end
+
+  def delete_author(author_db)
+    puts 'Deleting author!'
+  end
+
+  def list_author(author_db)
+    puts 'Listing author(s)!'
   end
 end
