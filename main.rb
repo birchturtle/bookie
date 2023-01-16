@@ -8,6 +8,9 @@ class Main
     if ARGV[0] == '-h'
       print_help
       exit 0
+    elsif ARGV[0] == '-l'
+      INTERACTOR.list_book
+      exit 0
     end
     init_menu
   end

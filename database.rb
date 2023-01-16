@@ -94,6 +94,15 @@ class GenreDb < Database
     id, name, type = cols[0]
     Genre.new(id, name, type) unless id.nil?
   end
+
+  def get_all_genres
+    genres = []
+    rows = @db.execute 'SELECT * FROM Genres'
+    rows.each do |row|
+      genres << Genre.new(*row)
+    end
+    genres
+  end
 end
 
 class AuthorDb < Database

@@ -25,6 +25,13 @@ describe 'author database' do
     expect([author_retrieved.id, author_retrieved.name]).to eq([author.id, author.name])
   end
 
+  it 'can find author by id' do
+    author = @author_db.get_author_by_id(1)
+
+    expect(author.nil?).to be false
+    expect(author.id).to eq 1
+  end
+
   after(:context) do
     File.delete('./test.sqlite3')
   end
@@ -47,6 +54,13 @@ describe 'genre database' do
     genreRetrieved = @genre_db.get_genre_by_name(genre.name)
 
     expect([genreRetrieved.id, genreRetrieved.name, genreRetrieved.type]).to eq([genre.id, genre.name, genre.type])
+  end
+
+  it 'can find genre by id' do
+    genre = @genre_db.get_genre_by_id 1
+
+    expect(genre.nil?).to be false
+    expect(genre.id).to eq 1
   end
 
   after(:context) do

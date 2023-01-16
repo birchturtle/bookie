@@ -45,11 +45,12 @@ class Interactor
   end
 
   def list_book
+    puts 'listing books'
     books = @book_db.get_all_books
     books.each do |book|
       author = @author_db.get_author_by_id book.author
       genre = @genre_db.get_genre_by_id book.genre
-      summarize_book book, author, genre unless author.nil? || genre.nil?
+      summarize_book(book, author, genre) unless author.nil? or genre.nil?
     end
   end
 
@@ -78,7 +79,10 @@ class Interactor
   end
 
   def list_genre
-    puts 'Listing genre(s)!'
+    genres = @genre_db.get_all_genres
+    genres.each do |genre|
+      puts "#{genre.name} (#{genre.type})"
+    end
   end
 
   private
@@ -92,7 +96,7 @@ class Interactor
 
   def get_dependency_entity_by_name(type, name)
     db = get_entity_database_by_type(type)
-    entity = db.send("get_#{type.to_s}_by_name")
+    entity = db.send("get_#{type}_by_name", name)
     if entity.nil?
       puts "Error: #{name} does not exist. Please add it first."
       exit 0
