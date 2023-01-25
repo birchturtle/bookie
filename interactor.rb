@@ -44,9 +44,17 @@ class Interactor
     end
   end
 
+  def list_books_by_priority(num)
+    books = @book_db.get_by_priority num
+    summarize_list_of_books books
+  end
+
   def list_book
-    puts 'listing books'
     books = @book_db.get_all_books
+    summarize_list_of_books books
+  end
+
+  private def summarize_list_of_books(books)
     books.each do |book|
       author = @author_db.get_author_by_id book.author
       genre = @genre_db.get_genre_by_id book.genre

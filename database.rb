@@ -40,7 +40,17 @@ class BookDb < Database
 
   def get_books_per_genre; end
 
-  def get_by_priority(num); end
+  def get_by_priority(num)
+    num = 10 if num.nil?
+    books = []
+    rows = @db.execute 'SELECT * FROM BOOKS ORDER BY Priority LIMIT ?', num
+    rows.each do |row|
+      id, title, read, author_id, genre_id, priority = row
+      book = Book.new(id, title, fix_bool_for_sqlite(read), author_id, genre_id, priority) unless id.nil?
+      books << book
+    end
+    books
+  end
 
   def add_book(book)
     @db.execute 'INSERT INTO Books(Title, Read, AuthorId, GenreId, Priority) VALUES ( ?, ?, ?, ?, ? )', book.title,

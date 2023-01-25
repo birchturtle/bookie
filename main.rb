@@ -9,6 +9,10 @@ class Main
       print_help
       exit 0
     elsif ARGV[0] == '-l'
+      if ARGV[1] == '-c'
+        INTERACTOR.list_books_by_priority ARGV[2]
+        exit 0
+      end
       INTERACTOR.list_book
       exit 0
     end
