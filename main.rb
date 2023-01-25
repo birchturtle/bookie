@@ -10,7 +10,7 @@ class Main
       exit 0
     elsif ARGV[0] == '-l'
       if ARGV[1] == '-c'
-        INTERACTOR.list_books_by_priority ARGV[2]
+        INTERACTOR.list_books_by_priority
         exit 0
       end
       INTERACTOR.list_book

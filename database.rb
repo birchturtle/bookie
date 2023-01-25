@@ -40,8 +40,7 @@ class BookDb < Database
 
   def get_books_per_genre; end
 
-  def get_by_priority(num)
-    num = 10 if num.nil?
+  def get_by_priority(num = 10)
     books = []
     rows = @db.execute 'SELECT * FROM BOOKS ORDER BY Priority LIMIT ?', num
     rows.each do |row|
@@ -128,6 +127,15 @@ class AuthorDb < Database
 
   def add_author(author)
     @db.execute 'INSERT INTO Authors (Name) VALUES ( ? )', author.name unless author.name.nil?
+  end
+
+  def get_all_authors
+    authors = []
+    rows = @db.execute 'SELECT * FROM Authors'
+    rows.each do |row|
+      authors << Author.new(*row)
+    end
+    authors
   end
 
   def get_author_by_name(name)

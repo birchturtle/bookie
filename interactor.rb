@@ -44,8 +44,13 @@ class Interactor
     end
   end
 
-  def list_books_by_priority(num)
-    books = @book_db.get_by_priority num
+  def list_books_by_priority
+    books = if ARGV[2].nil?
+              @book_db.get_by_priority
+            else
+              @book_db.get_by_priority ARGV[2]
+            end
+
     summarize_list_of_books books
   end
 
@@ -166,6 +171,9 @@ class Author_Handler
   end
 
   def list_author(author_db)
-    puts 'Listing author(s)!'
+    authors = author_db.get_all_authors
+    authors.each do |author|
+      puts "#{author.name}"
+    end
   end
 end
