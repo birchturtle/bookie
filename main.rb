@@ -4,6 +4,10 @@ require './interactor'
 
 class Main
   INTERACTOR = Interactor.new 'bookie.sqlite3'
+  def initialize
+    @running = true
+  end
+
   def run
     if ARGV[0] == '-h'
       print_help
@@ -16,7 +20,7 @@ class Main
       INTERACTOR.list_book
       exit 0
     end
-    init_menu
+    init_menu while @running
   end
 
   private
@@ -31,6 +35,7 @@ class Main
       L)ist
       D)elete
       A)dd
+      Q)uit
     MENU
     action = gets.strip
     case action
@@ -40,9 +45,10 @@ class Main
       entity_menu 'delete'
     when 'a'
       entity_menu 'add'
+    when 'q'
+      @running = false
     else
       print_help
-      exit 0
     end
   end
 
