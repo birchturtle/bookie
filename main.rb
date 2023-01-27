@@ -28,13 +28,12 @@ class Main
   def print_help
     puts 'Useful help text here :-)'
   end
-
   def init_menu
     puts 'Would you like to..?'
     puts <<-MENU
       L)ist
       D)elete
-      A)dd
+      A)dd or update existing
       Q)uit
     MENU
     action = gets.strip
@@ -51,6 +50,7 @@ class Main
       print_help
     end
   end
+
 
   def entity_menu(action)
     puts 'What..?'

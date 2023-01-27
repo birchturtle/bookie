@@ -13,6 +13,9 @@ class Interactor
   def add_book
     puts 'Title?'
     title = gets.strip
+    existing_book = @book_db.get_by_name(title)
+    return update_book(existing_book) unless existing_book.nil?
+
     puts 'Author? Note: Must match existing name in author database'
     author_name = gets.strip
     author = get_dependency_entity_by_name(:author, author_name)
@@ -31,6 +34,18 @@ class Interactor
     end
     puts 'Book added successfully!'
     summarize_book(book, author, genre)
+  end
+
+  private def update_book(book)
+    puts "Updating existing book '#{book.title}'"
+    statuses = {'y' => true, 'n' => false, true => 'y', false => 'n'}
+    puts "Read? (y/n) (Current: #{statuses[book.read?]})"
+    read = gets.strip
+    book.read = statuses[read]
+
+    puts "New priority? (Current: #{book.priority})"
+    book.priority = gets.strip
+    @book_db.update_book book
   end
 
   def delete_book

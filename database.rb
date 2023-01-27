@@ -56,6 +56,11 @@ class BookDb < Database
                 fix_bool_for_sqlite(book.read?), book.author, book.genre, book.priority
   end
 
+  def update_book(book)
+    @db.execute 'UPDATE Books SET Title=?, Read=?, AuthorID=?, GenreId=?, Priority=? WHERE Id = ?', book.title,
+                fix_bool_for_sqlite(book.read?), book.author, book.genre, book.priority, book.id
+  end
+
   def fix_bool_for_sqlite(bool)
     if bool.is_a?(Integer)
       bool == 1

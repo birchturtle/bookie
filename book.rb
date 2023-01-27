@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Book
-  attr_reader :id, :title, :read, :author, :genre, :priority
+  attr_accessor :id, :title, :read, :author, :genre, :priority
 
   def initialize(id, title, read, author, genre, priority)
     @id = id
